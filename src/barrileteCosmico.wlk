@@ -1,0 +1,7 @@
+object objeto {
+	
+}
+
+class Clase {
+	
+}

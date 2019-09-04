@@ -1,0 +1,9 @@
+import barrileteCosmico.*
+
+describe "Barrilete Cósmico" {
+
+	test "true es true" {
+		assert.that(true)
+	}
+	
+}
