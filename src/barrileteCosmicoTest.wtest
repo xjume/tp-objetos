@@ -2,52 +2,62 @@ import barrileteCosmico.*
 
 describe "Barrilete Cósmico" {
 
-	test "Los destinos mas importantes son" {
+	test "Los destinos más importantes son" {
 		var garlicsSea = new Destinos(nombre= "Garlic´s Sea",sugerenciasDeViaje = ["Caña de Pescar", "Piloto"] ,precioPorVolar = 2500)
 		var silversSea = new Destinos(nombre= "Silver´s Sea",sugerenciasDeViaje = ["Protector Solar", "Equipo de Buceo"] ,precioPorVolar = 1350)
 		var lastToninas = new Destinos(nombre= "Last Toninas",sugerenciasDeViaje = ["Vacuna Gripal", "Vacuna B", "Necronomicon"] ,precioPorVolar = 3500)
 		var goodAirs = new Destinos(nombre= "Good Airs",sugerenciasDeViaje = ["Cerveza", "ProtectorSolar"] ,precioPorVolar = 1500)
+		
 		barrileteCosmico.agregarDestinos(garlicsSea)
 		barrileteCosmico.agregarDestinos(silversSea)
 		barrileteCosmico.agregarDestinos(lastToninas)
 		barrileteCosmico.agregarDestinos(goodAirs)
-		assert.equals(lastToninas,barrileteCosmico.obtenerLosDestinosMasImportantes())
-		assert.equals(garlicsSea,barrileteCosmico.obtenerLosDestinosMasImportantes())
+		
+		assert.equals([garlicsSea, lastToninas], barrileteCosmico.obtenerLosDestinosMasImportantes())
 	}
 	
 	test "Descuento del 25% en Last Toninas"{
 		var lastToninas = new Destinos(nombre= "Last Toninas",sugerenciasDeViaje = ["Vacuna Gripal", "Vacuna B", "Necronomicon"] ,precioPorVolar = 3500)
-		assert.equals(2625,lastToninas.precioPorVolarConDescuento(25))
+		lastToninas.aplicarDescuento(25)
+		
+		assert.equals(2625, lastToninas.precioPorVolar())
 	}
+	
 	test "Descuento del 15% a todos los destinos"{
 		var garlicsSea = new Destinos(nombre= "Garlic´s Sea",sugerenciasDeViaje = ["Caña de Pescar", "Piloto"] ,precioPorVolar = 2500)
 		var silversSea = new Destinos(nombre= "Silver´s Sea",sugerenciasDeViaje = ["Protector Solar", "Equipo de Buceo"] ,precioPorVolar = 1350)
 		var lastToninas = new Destinos(nombre= "Last Toninas",sugerenciasDeViaje = ["Vacuna Gripal", "Vacuna B", "Necronomicon"] ,precioPorVolar = 3500)
 		var goodAirs = new Destinos(nombre= "Good Airs",sugerenciasDeViaje = ["Cerveza", "ProtectorSolar"] ,precioPorVolar = 1500)
+		
 		barrileteCosmico.agregarDestinos(garlicsSea)
 		barrileteCosmico.agregarDestinos(silversSea)
 		barrileteCosmico.agregarDestinos(lastToninas)
 		barrileteCosmico.agregarDestinos(goodAirs)
 		barrileteCosmico.aplicarDescuentoALosDestinos(15)
+		
 		assert.equals(2125,garlicsSea.precioPorVolar())
 		assert.equals(1147.5,silversSea.precioPorVolar())
 		assert.equals(2975,lastToninas.precioPorVolar())
 		assert.equals(1275,goodAirs.precioPorVolar())
 	}
+	
 	test "Silver´s Sea es un destino Peligroso?"{
 		var silversSea = new Destinos(nombre= "Silver´s Sea",sugerenciasDeViaje = ["Protector Solar", "Equipo de Buceo"] ,precioPorVolar = 1350)
 		assert.notThat(silversSea.llevarVacuna())
 	}
+	
 	test "Los destinos mas peligrosos son"{
 		var garlicsSea = new Destinos(nombre= "Garlic´s Sea",sugerenciasDeViaje = ["Caña de Pescar", "Piloto"] ,precioPorVolar = 2500)
 		var silversSea = new Destinos(nombre= "Silver´s Sea",sugerenciasDeViaje = ["Protector Solar", "Equipo de Buceo"] ,precioPorVolar = 1350)
 		var lastToninas = new Destinos(nombre= "Last Toninas",sugerenciasDeViaje = ["Vacuna Gripal", "Vacuna B", "Necronomicon"] ,precioPorVolar = 3500)
 		var goodAirs = new Destinos(nombre= "Good Airs",sugerenciasDeViaje = ["Cerveza", "ProtectorSolar"] ,precioPorVolar = 1500)
+		
 		barrileteCosmico.agregarDestinos(garlicsSea)
 		barrileteCosmico.agregarDestinos(silversSea)
 		barrileteCosmico.agregarDestinos(lastToninas)
 		barrileteCosmico.agregarDestinos(goodAirs)
-		assert.equals(lastToninas,barrileteCosmico.lugaresPeligrosos())
+		
+		assert.equals([lastToninas],barrileteCosmico.lugaresPeligrosos())
 	}
 	test "Barrilete Cosmico es empresa extrema?"{
 		var garlicsSea = new Destinos(nombre= "Garlic´s Sea",sugerenciasDeViaje = ["Caña de Pescar", "Piloto"] ,precioPorVolar = 2500)
