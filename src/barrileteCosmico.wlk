@@ -1,12 +1,24 @@
-class Destinos {
+class Destino {
 		var nombre
 		var sugerenciasDeViaje = []
 		var precioPorVolar
+		
+		method nombre(){
+			return nombre
+		}
 		
 		method sugerenciasDeViaje(){
 			return sugerenciasDeViaje
 		}
 		
+		method agregarEquipaje(equipaje){
+			sugerenciasDeViaje.add(equipaje)
+		}
+		
+		method precioPorVolar(){
+			return precioPorVolar
+		}
+	
 		method destacado(){
 			return precioPorVolar > 2000
 		}
@@ -16,48 +28,37 @@ class Destinos {
 			self.agregarEquipaje("Certificado de descuento")
 		}
 		
-		method agregarEquipaje(equipaje){
-			sugerenciasDeViaje.add(equipaje)
-		}
-		
-		method llevarVacuna(){
+		method esPeligroso(){
 			return sugerenciasDeViaje.contains("Vacuna Gripal")|| sugerenciasDeViaje.contains("Vacuna B")
 		}
-		
-		method nombre(){
-			return nombre
-		}
-		
-		method precioPorVolar(){
-			return precioPorVolar
-		}
+
 }
 
 object barrileteCosmico{ 
 	var destinos = []
 	
-	method obtenerLosDestinosMasImportantes(){
-		return destinos.filter({destino=>destino.destacado()})
-	}
-	
-	method aplicarDescuentoALosDestinos(descuento){
-		destinos.forEach({destino => destino.aplicarDescuento(descuento)})
-	}
-	
-	method esEmpresaExtrema(){
-		return destinos.any({destino => destino.llevarVacuna()})
-	}
-	
 	method cartaDeDestinos(){
-		return destinos.forEach({destino => destino.nombre()})
+		return destinos.map({ destino => destino.nombre() })
 	}
 	
-	method agregarDestinos(destino){
+	method agregarDestino(destino){
 		destinos.add(destino)
 	}
 	
+	method destinosMasImportantes(){
+		return destinos.filter({ destino=>destino.destacado() })
+	}
+	
+	method aplicarDescuentoATodosLosDestinos(descuento){
+		destinos.forEach({ destino => destino.aplicarDescuento(descuento) })
+	}
+	
+	method esEmpresaExtrema(){
+		return destinos.any({ destino => destino.esPeligroso() })
+	}
+		
 	method lugaresPeligrosos(){
-		return destinos.filter({destino => destino.llevarVacuna()})
+		return destinos.filter({ destino => destino.esPeligroso() })
 	}
 }
 	
