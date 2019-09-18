@@ -62,4 +62,33 @@ object barrileteCosmico{
 	}
 }
 	
+class Usuario {
+	var username
+	var historial = []
+	var cuenta
+	var siguiendo = []
 	
+	method historial(){
+		return historial
+	}
+
+	method cuenta(){
+		return cuenta
+	}
+	
+	method volarA(destino){
+		if (cuenta >= destino.precioPorVolar()){
+			historial.add(destino)
+			cuenta = cuenta - destino.precioPorVolar()	
+		}
+	}
+	
+	method kilometros(){
+		return (historial.map({ destino => destino.precioPorVolar() })).sum() * 0.1
+	}
+	
+	method seguirA(usuario){
+		siguiendo.add(usuario)
+		usuario.seguirA(self)
+	}
+}

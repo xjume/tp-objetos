@@ -6,6 +6,7 @@ describe "Barrilete Cósmico" {
 	var silversSea
 	var lastToninas
 	var goodAirs
+	var phari
 
 	fixture{
 		garlicsSea 	= new Destino(nombre= "Garlic's Sea",sugerenciasDeViaje = ["Caña de Pescar", "Piloto"] ,precioPorVolar = 2500)
@@ -17,6 +18,8 @@ describe "Barrilete Cósmico" {
 		barrileteCosmico.agregarDestino(silversSea)
 		barrileteCosmico.agregarDestino(lastToninas)
 		barrileteCosmico.agregarDestino(goodAirs)
+		
+		phari = new Usuario(username="PHari", historial=[lastToninas], cuenta = 1500, siguiendo= [])
 	}
 
 	test "Los destinos más importantes de BC son Garlic's Sea y Last Toninas" {	
@@ -58,10 +61,18 @@ describe "Barrilete Cósmico" {
 		assert.equals(["Garlic's Sea", "Silver's Sea", "Last Toninas", "Good Airs"], barrileteCosmico.cartaDeDestinos())
 	}
 	
-	test "PHari tiene 500 km"{}
+	test "PHari tiene 500 km"{
+		assert.equals(350, phari.kilometros())
+	}
 	
-	test "PHari puede volar a Silver's Sea y dicho destino se agrega a su historial"{}
+	test "PHari puede volar a Silver's Sea y dicho destino se agrega a su historial"{
+		phari.volarA(silversSea)
+		assert.that(phari.historial().contains(silversSea))
+	}
 
-	test "Phari puede volar a Silver's Sea y tiene $150"{}
+	test "Phari puede volar a Silver's Sea y tiene $150"{
+		phari.volarA(silversSea)
+		assert.equals(150, phari.cuenta())
+	}
 	
 }
