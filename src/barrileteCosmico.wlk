@@ -3,20 +3,14 @@ class Destino {
 		var sugerenciasDeViaje = []
 		var precioPorVolar
 		
-		method nombre(){
-			return nombre
-		}
+		method nombre() = nombre
 		
-		method sugerenciasDeViaje(){
-			return sugerenciasDeViaje
-		}
+		method sugerenciasDeViaje() = sugerenciasDeViaje 
+		
+		method precioPorVolar() = precioPorVolar
 		
 		method agregarEquipaje(equipaje){
 			sugerenciasDeViaje.add(equipaje)
-		}
-		
-		method precioPorVolar(){
-			return precioPorVolar
 		}
 	
 		method destacado(){
@@ -72,9 +66,7 @@ class Usuario {
 		return historial
 	}
 
-	method cuenta(){
-		return cuenta
-	}
+	method cuenta() = cuenta 
 	
 	method volarA(destino){
 		if (cuenta >= destino.precioPorVolar()){
