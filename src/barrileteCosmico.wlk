@@ -23,7 +23,7 @@ class Destino {
 		}
 		
 		method esPeligroso(){
-			return sugerenciasDeViaje.contains("Vacuna Gripal")|| sugerenciasDeViaje.contains("Vacuna B")
+			return sugerenciasDeViaje.any({sugerencia => sugerencia.contains("Vacuna")})
 		}
 
 }
