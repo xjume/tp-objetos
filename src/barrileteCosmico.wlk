@@ -69,18 +69,23 @@ class Usuario {
 	method cuenta() = cuenta 
 	
 	method volarA(destino){
-		if (cuenta >= destino.precioPorVolar()){
+		if (cuenta < destino.precioPorVolar()){
+			throw new UserException(message = "No puede volar")
+		}else{
 			historial.add(destino)
-			cuenta = cuenta - destino.precioPorVolar()	
+			cuenta = cuenta - destino.precioPorVolar()
 		}
 	}
-	
 	method kilometros(){
 		return (historial.map({ destino => destino.precioPorVolar() })).sum() * 0.1
 	}
 	
 	method seguirA(usuario){
 		siguiendo.add(usuario)
-		usuario.seguirA(self)
+		usuario.follow(self)
+	}
+	method follow(usuario){
+		siguiendo.add(usuario)
 	}
 }
+class UserException inherits Exception { }

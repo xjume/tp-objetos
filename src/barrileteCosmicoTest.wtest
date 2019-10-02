@@ -19,7 +19,7 @@ describe "Barrilete Cósmico" {
 		barrileteCosmico.agregarDestino(lastToninas)
 		barrileteCosmico.agregarDestino(goodAirs)
 		
-		phari = new Usuario(username="PHari", historial=[lastToninas], cuenta = 1500, siguiendo= [])
+		phari = new Usuario(username="PHari", historial=[lastToninas,goodAirs], cuenta = 1500, siguiendo= [])
 	}
 
 	test "Los destinos más importantes de BC son Garlic's Sea y Last Toninas" {	
@@ -40,12 +40,22 @@ describe "Barrilete Cósmico" {
 		assert.notThat(silversSea.esPeligroso())
 	}
 	
-	test "Descuento del 15% a todos los destinos"{
+	test "Descuento del 15% a garlic´s sea"{
 		barrileteCosmico.aplicarDescuentoATodosLosDestinos(15)
-		
 		assert.equals(2125,garlicsSea.precioPorVolar())
+	}
+	test "Descuento del 15% a Silver´s Sea"{
+		barrileteCosmico.aplicarDescuentoATodosLosDestinos(15)
 		assert.equals(1147.5,silversSea.precioPorVolar())
+		
+	}
+	test "Descuento del 15% a Last Toninas"{
+		barrileteCosmico.aplicarDescuentoATodosLosDestinos(15)
 		assert.equals(2975,lastToninas.precioPorVolar())
+		
+	}
+	test "Descuento del 15% a Good Airs"{
+		barrileteCosmico.aplicarDescuentoATodosLosDestinos(15)
 		assert.equals(1275,goodAirs.precioPorVolar())
 	}
 
@@ -62,7 +72,7 @@ describe "Barrilete Cósmico" {
 	}
 	
 	test "PHari tiene 500 km"{
-		assert.equals(350, phari.kilometros())
+		assert.equals(500, phari.kilometros())
 	}
 	
 	test "PHari puede volar a Silver's Sea y dicho destino se agrega a su historial"{
