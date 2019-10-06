@@ -7,19 +7,40 @@ describe "Barrilete Cósmico" {
 	var lastToninas
 	var goodAirs
 	var phari
+	var avion
+	var auto
+	var barco
+	var tren
+	var viajeNuevo1
+	var viajeNuevo2
 
 	fixture{
-		garlicsSea 	= new Destino(nombre= "Garlic's Sea",sugerenciasDeViaje = ["Caña de Pescar", "Piloto"] ,precioPorVolar = 2500)
-		silversSea 	= new Destino(nombre= "Silver's Sea",sugerenciasDeViaje = ["Protector Solar", "Equipo de Buceo"] ,precioPorVolar = 1350)
-		lastToninas = new Destino(nombre= "Last Toninas",sugerenciasDeViaje = ["Vacuna Gripal", "Vacuna B", "Necronomicon"] ,precioPorVolar = 3500)
-		goodAirs 	= new Destino(nombre= "Good Airs",sugerenciasDeViaje = ["Cerveza", "ProtectorSolar"] ,precioPorVolar = 1500)
-	
+		garlicsSea 	= new Destino(nombre= "Garlic's Sea",sugerenciasDeViaje = ["Caña de Pescar", "Piloto"] ,precioPorVolar = 2500,kilometroDeUbicacion =0)
+		silversSea 	= new Destino(nombre= "Silver's Sea",sugerenciasDeViaje = ["Protector Solar", "Equipo de Buceo"] ,precioPorVolar = 1350,kilometroDeUbicacion =10)
+		lastToninas = new Destino(nombre= "Last Toninas",sugerenciasDeViaje = ["Vacuna Gripal", "Vacuna B", "Necronomicon"] ,precioPorVolar = 3500,kilometroDeUbicacion =20)
+		goodAirs 	= new Destino(nombre= "Good Airs",sugerenciasDeViaje = ["Cerveza", "ProtectorSolar"] ,precioPorVolar = 1500,kilometroDeUbicacion =30)
+	/*En los destino invente los kilometros de origen*/
+		avion = new MedioDeTransporte(duracion = 1, valorPorKilometro = 50)
+		auto = new MedioDeTransporte(duracion = 10, valorPorKilometro = 10)
+		barco = new MedioDeTransporte(duracion = 7, valorPorKilometro = 30)
+		tren = new MedioDeTransporte(duracion = 9, valorPorKilometro = 20)
+			
 		barrileteCosmico.agregarDestino(garlicsSea)
 		barrileteCosmico.agregarDestino(silversSea)
 		barrileteCosmico.agregarDestino(lastToninas)
 		barrileteCosmico.agregarDestino(goodAirs)
+		barrileteCosmico.agregarMedioDeTransporte(avion)
+		barrileteCosmico.agregarMedioDeTransporte(auto)
+		barrileteCosmico.agregarMedioDeTransporte(barco)
+		barrileteCosmico.agregarMedioDeTransporte(tren)
 		
-		phari = new Usuario(username="PHari", historial=[lastToninas,goodAirs], cuenta = 1500, siguiendo= [])
+		phari = new Usuario(username="PHari", historial=[viajeNuevo1,viajeNuevo2], cuenta = 3700, siguiendo= [],localidadDeOrigen = garlicsSea)
+		/*cambie el valor de 1500 a 3700 de la cuenta para que dieran los ultimos 2 test de phari
+		 * 
+		phari = new Usuario(username="PHari", historial=[lastToninas,goodAirs], cuenta = 1500, siguiendo= [])*/
+		
+		viajeNuevo1 = new Viajes(localidadDeOrigen = garlicsSea, localidadDeDestino = lastToninas, medioDeTransporte = auto)
+		viajeNuevo2 = new Viajes(localidadDeOrigen = garlicsSea, localidadDeDestino = goodAirs, medioDeTransporte = avion)
 	}
 
 	test "Los destinos más importantes de BC son Garlic's Sea y Last Toninas" {	
@@ -73,16 +94,24 @@ describe "Barrilete Cósmico" {
 	
 	test "PHari tiene 500 km"{
 		assert.equals(500, phari.kilometros())
-	}
+	}/*este no tengo idea que es lo de inicializar la variable viajes */
 	
-	test "PHari puede volar a Silver's Sea y dicho destino se agrega a su historial"{
+	test "PHari puede viajar a viajeNuevo1 y dicho viaje se agrega a su historial"{
+		phari.viajar(viajeNuevo1)
+		assert.that(phari.historial().contains(viajeNuevo1))
+	}/*test "PHari puede volar a Silver's Sea y dicho destino se agrega a su historial"{
 		phari.volarA(silversSea)
 		assert.that(phari.historial().contains(silversSea))
-	}
+	} */
 
+	test "Phari puede viajar a viajeNuevo2 y tiene $700"{
+		phari.viajar(viajeNuevo2)
+		assert.equals(700, phari.cuenta())
+	}/*cambie el valor que tenia que dar porque al cambiar el method cambia el resultado
+	 * 
 	test "Phari puede volar a Silver's Sea y tiene $150"{
 		phari.volarA(silversSea)
 		assert.equals(150, phari.cuenta())
 	}
-	
+	 */
 }

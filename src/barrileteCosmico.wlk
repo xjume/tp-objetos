@@ -1,4 +1,4 @@
-class Destino {
+class Destino inherits Localidades {
 		var nombre
 		var sugerenciasDeViaje = []
 		var precioPorVolar
@@ -30,6 +30,7 @@ class Destino {
 
 object barrileteCosmico{ 
 	var destinos = []
+	var mediosDeTransporte = []
 	
 	method cartaDeDestinos(){
 		return destinos.map({ destino => destino.nombre() })
@@ -38,6 +39,15 @@ object barrileteCosmico{
 	method agregarDestino(destino){
 		destinos.add(destino)
 	}
+	
+	method agregarMedioDeTransporte(medioDeTransporte){
+		mediosDeTransporte.add(medioDeTransporte)
+	}
+	
+	method elegirAlAzarTransporte(){
+		return mediosDeTransporte.take(1)	/*Hay que ver como sacamos un medio de transporte al azar porque asi agarra siempre el primero*/
+	}
+	
 	
 	method destinosMasImportantes(){
 		return destinos.filter({ destino=>destino.destacado() })
@@ -54,6 +64,12 @@ object barrileteCosmico{
 	method lugaresPeligrosos(){
 		return destinos.filter({ destino => destino.esPeligroso() })
 	}
+	method armarViaje(viaje,localidadDeDestino,usuario){
+		viaje.cambiarOrigen(usuario)
+		viaje.colocarDestino(localidadDeDestino)
+		viaje.medioDeTransporte(self)
+	}
+	
 }
 	
 class Usuario {
@@ -61,24 +77,31 @@ class Usuario {
 	var historial = []
 	var cuenta
 	var siguiendo = []
+	var localidadDeOrigen
 	
+	
+	method localidadDeOrigen(){
+		return localidadDeOrigen
+	}
 	method historial(){
 		return historial
 	}
 
 	method cuenta() = cuenta 
 	
-	method volarA(destino){
-		if (cuenta < destino.precioPorVolar()){
-			throw new UserException(message = "No puede volar")
+	method viajar(viajes){
+		if (cuenta < viajes.precioDelViaje()){
+			throw new UserException(message = "No puede viajar")
 		}else{
-			historial.add(destino)
-			cuenta = cuenta - destino.precioPorVolar()
+			historial.add(viajes)
+			cuenta = cuenta - viajes.precioDelViaje()
+			localidadDeOrigen = viajes.localidadDeDestino()
 		}
 	}
 	method kilometros(){
-		return (historial.map({ destino => destino.precioPorVolar() })).sum() * 0.1
+		return historial.map({viajes => viajes.kilometrosEntre()}).sum() 
 	}
+	
 	
 	method seguirA(usuario){
 		siguiendo.add(usuario)
@@ -87,5 +110,54 @@ class Usuario {
 	method follow(usuario){
 		siguiendo.add(usuario)
 	}
+}
+class MedioDeTransporte{
+	var duracion
+	var valorPorKilometro
+	method valorPorKilometro(){
+		return valorPorKilometro
+	}
+}
+class Localidades {
+	var kilometroDeUbicacion
+	
+	method kilometroDeUbicacion(){
+		return kilometroDeUbicacion
+	}
+	method kilometrosHasta(localidad){
+		return (self.kilometroDeUbicacion() - localidad.kilometroDeUbicacion()).abs()
+	}
+}
+class Viajes {
+	var localidadDeOrigen
+	var localidadDeDestino
+	var medioDeTransporte 
+	method kilometrosEntre(){
+		return (localidadDeOrigen.kilometroDeUbicacion() - localidadDeDestino.kilometroDeUbicacion()).abs()
+	}
+	
+	method localidadDeOrigen(){
+		return localidadDeOrigen
+	}
+	method localidadDeDestino(){
+		return localidadDeDestino
+	}
+	method precioDelViaje(){
+		return self.precioDelMedioDeTransporte()+ localidadDeDestino.precioPorVolar()
+	}
+	method precioDelMedioDeTransporte(){
+		return medioDeTransporte.valorPorKilometro()*localidadDeOrigen.kilometrosHasta(localidadDeDestino)
+	}
+	method cambiarOrigen(usuario){
+		localidadDeOrigen = usuario.localidadDeOrigen()
+	}
+	method colocarDestino(localidad){
+		localidadDeDestino = localidad 
+			
+	}
+	method medioDeTransporte(barrileteCosmico){
+		medioDeTransporte = barrileteCosmico.elegirAlAzarTransporte()
+	}
+		
 }
 class UserException inherits Exception { }
