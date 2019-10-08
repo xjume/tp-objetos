@@ -44,8 +44,8 @@ object barrileteCosmico{
 		mediosDeTransporte.add(medioDeTransporte)
 	}
 	
-	method elegirAlAzarTransporte(){
-		return mediosDeTransporte.take(1)	/*Hay que ver como sacamos un medio de transporte al azar porque asi agarra siempre el primero*/
+	method elegirAlAzarTransporte(numero){
+		return mediosDeTransporte.take(numero)	/*Hay que ver como sacamos un medio de transporte al azar porque asi agarra siempre el primero*/
 	}
 	
 	
@@ -64,10 +64,10 @@ object barrileteCosmico{
 	method lugaresPeligrosos(){
 		return destinos.filter({ destino => destino.esPeligroso() })
 	}
-	method armarViaje(viaje,localidadDeDestino,usuario){
+	method armarViaje(viaje,localidadDeDestino,usuario,numero){
 		viaje.cambiarOrigen(usuario)
 		viaje.colocarDestino(localidadDeDestino)
-		viaje.medioDeTransporte(self)
+		viaje.medioDeTransportesAlAzar(self,numero)
 	}
 	
 }
@@ -102,7 +102,6 @@ class Usuario {
 		return historial.map({viajes => viajes.kilometrosEntre()}).sum() 
 	}
 	
-	
 	method seguirA(usuario){
 		siguiendo.add(usuario)
 		usuario.follow(self)
@@ -132,6 +131,7 @@ class Viajes {
 	var localidadDeOrigen
 	var localidadDeDestino
 	var medioDeTransporte 
+	
 	method kilometrosEntre(){
 		return (localidadDeOrigen.kilometroDeUbicacion() - localidadDeDestino.kilometroDeUbicacion()).abs()
 	}
@@ -155,8 +155,11 @@ class Viajes {
 		localidadDeDestino = localidad 
 			
 	}
-	method medioDeTransporte(barrileteCosmico){
-		medioDeTransporte = barrileteCosmico.elegirAlAzarTransporte()
+	method medioDeTransportesAlAzar(barrileteCosmico,numero){
+		medioDeTransporte = barrileteCosmico.elegirAlAzarTransporte(numero)
+	}
+	method medioDeTransporte(){
+		return medioDeTransporte
 	}
 		
 }
