@@ -45,7 +45,7 @@ object barrileteCosmico{
 	}
 	
 	method elegirAlAzarTransporte(numero){
-		return mediosDeTransporte.take(numero)	/*Hay que ver como sacamos un medio de transporte al azar porque asi agarra siempre el primero*/
+		return mediosDeTransporte.take(numero)	
 	}
 	
 	
