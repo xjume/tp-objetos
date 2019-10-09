@@ -1,8 +1,15 @@
-class Destino inherits Localidades {
+class Localidad {
 		var nombre
 		var sugerenciasDeViaje = []
 		var precioPorVolar
+		var kilometroDeUbicacion
+	
+		method kilometroDeUbicacion() = kilometroDeUbicacion
 		
+		method kilometrosHasta(localidad){
+			return (self.kilometroDeUbicacion() - localidad.kilometroDeUbicacion()).abs()
+		}
+	
 		method nombre() = nombre
 		
 		method sugerenciasDeViaje() = sugerenciasDeViaje 
@@ -28,9 +35,96 @@ class Destino inherits Localidades {
 
 }
 
+class MedioDeTransporte{
+	var duracion
+	var valorPorKilometro
+
+	method valorPorKilometro() = valorPorKilometro
+	
+}
+
+class Usuario {
+	var username
+	var historial = []
+	var cuenta
+	var siguiendo = []
+	var localidadDeOrigen
+	
+	method historial() = historial
+
+	method cuenta () = cuenta 
+	
+	method localidadDeOrigen() = localidadDeOrigen
+	
+	method viajar(viaje){
+		if (cuenta < viaje.precioDelViaje()){
+			throw new UserException(message = "No puede viajar. Cuenta: " + cuenta + " Viaje: " 
+				+ viaje.precioDelViaje()
+			)
+		}else{
+			historial.add(viaje)
+			cuenta = cuenta - viaje.precioDelViaje()
+			localidadDeOrigen = viaje.localidadDeDestino()
+		}
+	}
+	
+	method kilometros(){
+		return historial.map({viaje => viaje.kilometrosEntre()}).sum() 
+	}
+	
+	method seguirA(usuario){
+		siguiendo.add(usuario)
+		usuario.follow(self)
+	}
+	
+	method follow(usuario){
+		siguiendo.add(usuario)
+	}
+}
+
+class Viajes {
+	var localidadDeOrigen
+	var localidadDeDestino
+	var medioDeTransporte 
+	
+	method kilometrosEntre(){
+		return (localidadDeOrigen.kilometroDeUbicacion() - localidadDeDestino.kilometroDeUbicacion()).abs()
+	}
+	
+	method localidadDeOrigen() = localidadDeOrigen
+	
+	method localidadDeDestino() = localidadDeDestino
+	
+	method medioDeTransporte() = medioDeTransporte
+
+	method precioDelViaje(){
+		return self.precioDelMedioDeTransporte() + localidadDeDestino.precioPorVolar()
+	}
+	
+	method precioDelMedioDeTransporte(){
+		return medioDeTransporte.valorPorKilometro()*localidadDeOrigen.kilometrosHasta(localidadDeDestino)
+	}
+	
+	method cambiarOrigenSegun(usuario){
+		localidadDeOrigen = usuario.localidadDeOrigen()
+	}
+	
+	method cambiarDestino(localidad){
+		localidadDeDestino = localidad		
+	}
+	
+	method medioDeTransportesAlAzar(transporte){
+		medioDeTransporte = transporte
+	}		
+}
+
+class UserException inherits Exception { }
+
 object barrileteCosmico{ 
 	var destinos = []
 	var mediosDeTransporte = []
+	
+	method mediosDeTransporte() = mediosDeTransporte
 	
 	method cartaDeDestinos(){
 		return destinos.map({ destino => destino.nombre() })
@@ -43,11 +137,6 @@ object barrileteCosmico{
 	method agregarMedioDeTransporte(medioDeTransporte){
 		mediosDeTransporte.add(medioDeTransporte)
 	}
-	
-	method elegirAlAzarTransporte(numero){
-		return mediosDeTransporte.take(numero)	
-	}
-	
 	
 	method destinosMasImportantes(){
 		return destinos.filter({ destino=>destino.destacado() })
@@ -64,103 +153,10 @@ object barrileteCosmico{
 	method lugaresPeligrosos(){
 		return destinos.filter({ destino => destino.esPeligroso() })
 	}
-	method armarViaje(viaje,localidadDeDestino,usuario,numero){
-		viaje.cambiarOrigen(usuario)
+	
+	method armarViaje(viaje, localidadDeDestino, usuario){
+		viaje.cambiarOrigenSegun(usuario)
 		viaje.colocarDestino(localidadDeDestino)
-		viaje.medioDeTransportesAlAzar(self,numero)
-	}
-	
-}
-	
-class Usuario {
-	var username
-	var historial = []
-	var cuenta
-	var siguiendo = []
-	var localidadDeOrigen
-	
-	
-	method localidadDeOrigen(){
-		return localidadDeOrigen
-	}
-	method historial(){
-		return historial
-	}
-
-	method cuenta() = cuenta 
-	
-	method viajar(viajes){
-		if (cuenta < viajes.precioDelViaje()){
-			throw new UserException(message = "No puede viajar")
-		}else{
-			historial.add(viajes)
-			cuenta = cuenta - viajes.precioDelViaje()
-			localidadDeOrigen = viajes.localidadDeDestino()
-		}
-	}
-	method kilometros(){
-		return historial.map({viajes => viajes.kilometrosEntre()}).sum() 
-	}
-	
-	method seguirA(usuario){
-		siguiendo.add(usuario)
-		usuario.follow(self)
-	}
-	method follow(usuario){
-		siguiendo.add(usuario)
+		viaje.medioDeTransportesAlAzar(mediosDeTransporte.take([0.randomUpTo(mediosDeTransporte.size())]))
 	}
 }
-class MedioDeTransporte{
-	var duracion
-	var valorPorKilometro
-	method valorPorKilometro(){
-		return valorPorKilometro
-	}
-}
-class Localidades {
-	var kilometroDeUbicacion
-	
-	method kilometroDeUbicacion(){
-		return kilometroDeUbicacion
-	}
-	method kilometrosHasta(localidad){
-		return (self.kilometroDeUbicacion() - localidad.kilometroDeUbicacion()).abs()
-	}
-}
-class Viajes {
-	var localidadDeOrigen
-	var localidadDeDestino
-	var medioDeTransporte 
-	
-	method kilometrosEntre(){
-		return (localidadDeOrigen.kilometroDeUbicacion() - localidadDeDestino.kilometroDeUbicacion()).abs()
-	}
-	
-	method localidadDeOrigen(){
-		return localidadDeOrigen
-	}
-	method localidadDeDestino(){
-		return localidadDeDestino
-	}
-	method precioDelViaje(){
-		return self.precioDelMedioDeTransporte()+ localidadDeDestino.precioPorVolar()
-	}
-	method precioDelMedioDeTransporte(){
-		return medioDeTransporte.valorPorKilometro()*localidadDeOrigen.kilometrosHasta(localidadDeDestino)
-	}
-	method cambiarOrigen(usuario){
-		localidadDeOrigen = usuario.localidadDeOrigen()
-	}
-	method colocarDestino(localidad){
-		localidadDeDestino = localidad 
-			
-	}
-	method medioDeTransportesAlAzar(barrileteCosmico,numero){
-		medioDeTransporte = barrileteCosmico.elegirAlAzarTransporte(numero)
-	}
-	method medioDeTransporte(){
-		return medioDeTransporte
-	}
-		
-}
-class UserException inherits Exception { }
