@@ -141,8 +141,4 @@ describe "Barrilete Cósmico" {
 		assert.throwsException({ phari.viajar(viajeNuevo2) })
 	}
 	
-	test "Barrilete Cosmico arma viaje a Good Airs"{
-		barrileteCosmico.armarViaje(viajeNuevo2, goodAirs, phari)
-		assert.equals(goodAirs, viajeNuevo2.localidadDeDestino())
-	}
 }

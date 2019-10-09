@@ -109,7 +109,7 @@ class Viajes {
 		localidadDeOrigen = usuario.localidadDeOrigen()
 	}
 	
-	method cambiarDestino(localidad){
+	method colocarDestino(localidad){
 		localidadDeDestino = localidad		
 	}
 	
@@ -159,4 +159,5 @@ object barrileteCosmico{
 		viaje.colocarDestino(localidadDeDestino)
 		viaje.medioDeTransportesAlAzar(mediosDeTransporte.take([0.randomUpTo(mediosDeTransporte.size())]))
 	}
+	
 }
