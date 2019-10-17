@@ -57,13 +57,12 @@ class Usuario {
 	method localidadDeOrigen() = localidadDeOrigen
 	
 	method viajar(viaje){
-		if (cuenta < viaje.precioDelViaje()){
-			throw new UserException(message = "No puede viajar. Cuenta: " + cuenta + " Viaje: " 
-				+ viaje.precioDelViaje()
-			)
+		var precio = viaje.precioDelViaje()
+		if (cuenta < precio){
+			throw new UserException(message = "No puede viajar. Cuenta: " + cuenta + " Viaje: " + precio)
 		}else{
 			historial.add(viaje)
-			cuenta = cuenta - viaje.precioDelViaje()
+			cuenta = cuenta - precio
 			localidadDeOrigen = viaje.localidadDeDestino()
 		}
 	}
