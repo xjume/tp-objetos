@@ -29,88 +29,94 @@ class Localidad {
 			self.agregarEquipaje("Certificado de descuento")
 		}
 		
-		method esPeligroso(localidad){
+		method esPeligrosoPara(usuario){
 			return sugerenciasDeViaje.any({sugerencia => sugerencia.contains("Vacuna")})
 		}
-		method destinoDestacado(localidad){
-			return precioPorVolar > 2000
-		}
-
 }
 
-class Playas inherits Localidad{
-	override method esPeligroso(localidad){
+class Playa inherits Localidad{
+	override method esPeligrosoPara(usuario){
 		return false
 	}
 }
-class Montanias inherits Localidad{
+
+class Montania inherits Localidad{
 	var altura 
 	
-	 override method esPeligroso(localidad){
-		return super(localidad) && self.tengoMasDe5000()
+	override method esPeligrosoPara(usuario){
+		return super(usuario) && self.mideMasDe5000()
 	}
-	method tengoMasDe5000(){
+	
+	method mideMasDe5000(){
 		return altura > 5000
 	}
-	override method destinoDestacado(localidad){
+	
+	override method destacado(){
 		return true
 	}
 }
-class CiudadesHistoricas inherits Localidad{
+
+class CiudadHistorica inherits Localidad{
 	var museos = []
 	
-	override method esPeligroso(localidad){
-		return sugerenciasDeViaje.any({sugerencia => sugerencia.contains("Asistencia al viajero")})
+	override method esPeligrosoPara(usuario){
+		return usuario.tiene("Asistencia al viajero").negate()
 	}
-	override method destinoDestacado(localidad){
-		return super(localidad) && self.poseeMasDe3Museos() 
+	
+	override method destacado(){
+		return super() && self.poseeMasDe3Museos() 
 	}
+	
 	method poseeMasDe3Museos(){
-		return self.cantidadDeMuseos() > 3
-	}
-	method cantidadDeMuseos(){
-		return museos.size()
+		return museos.size() > 3
 	}
 }
 
 class MedioDeTransporte{
 	var duracion
-	var valorPorKilometro
+	var valorPorKM = 1
 	
-	method valorPorKilometro() = valorPorKilometro
-	method duracion()= duracion
+	method duracion() = duracion
+	method valorPorKilometro() = valorPorKM
 }
-class Aviones inherits MedioDeTransporte{
+
+class Avion inherits MedioDeTransporte{
 	var turbinas = []
 	
 	override method valorPorKilometro(){
 		return self.impulsoDeTurbinas().sum()
 	}
+	
 	method impulsoDeTurbinas(){
 		return turbinas.map({turbina=>turbina.nivelDeImpulso()})
 	}
+	
 	method agregarTurbina(turbina){
 		turbinas.add(turbina)
 	}
 }
-class Micros inherits MedioDeTransporte{
+
+class Micro inherits MedioDeTransporte{
 	override method valorPorKilometro(){
 		return 5000
 	}
 }
-class Trenes inherits MedioDeTransporte{
+
+class Tren inherits MedioDeTransporte{
 	override method valorPorKilometro(){
 		return 2300 * 1.6
 	}
 }
-class Barcos inherits MedioDeTransporte{
+
+class Barco inherits MedioDeTransporte{
 	var probabilidadDeChocarConIceberg
 	
 	override method valorPorKilometro(){
 		return 1000 * probabilidadDeChocarConIceberg
 	}
 }
-class Turbinas{
+
+class Turbina{
 	var nivelDeImpulso
 	
 	method nivelDeImpulso(){
@@ -119,36 +125,42 @@ class Turbinas{
 }
 
 class Usuario {
-	var userName
+	var username
 	var historial = []
 	var cuenta
 	var siguiendo = []
-	var localidadDeOrigen
+	var origen
+	var destino
 	var perfil
-	//var mochila = []
+	var mochila = []
 	
 	method historial() = historial
 
 	method cuenta () = cuenta 
 	
-	method localidadDeOrigen() = localidadDeOrigen
+	method localidadDeOrigen() = origen
 	
 	method viajar(viaje){
 		var precio = viaje.precioDelViaje()
 		
-		if (cuenta < precio /* || self.mochilaTieneTodo(viaje).negate()*/){
-			
-			throw new UserException(message = "No puede viajar. Cuenta: " + cuenta + " Viaje: " + precio)
-		
+		if (cuenta < precio || self.mochilaTieneTodoPara(viaje.localidadDeDestino()).negate()){		
+			throw new UserException(message = "No puede viajar. Cuenta: " + cuenta + " Viaje: " + precio)	
 		} else {
 			historial.add(viaje)
 			cuenta = cuenta - precio
-			localidadDeOrigen = viaje.localidadDeDestino()
+			origen = viaje.localidadDeDestino()
 		}
 	}
-	/*method mochilaTieneTodo(viaje){
-		return mochila.containsall(viaje.localidadDeDestino().sugerenciasDeViaje())
-	}*/
+	
+	// Método desarrollado específicamente para testing
+	method vaciarMochila(){
+		mochila.clear()
+	}
+	
+	method mochilaTieneTodoPara(localidadDestino){
+		return localidadDestino.sugerenciasDeViaje().all({ sugerencia => mochila.any({ item => item == sugerencia }) })
+	}
+	
 	method kilometros(){
 		return historial.map({viaje => viaje.kilometrosEntre()}).sum() 
 	}
@@ -161,25 +173,40 @@ class Usuario {
 	method follow(usuario){
 		siguiendo.add(usuario)
 	}
+
+	method perfil(perfilDeUsuario){
+		perfil = perfilDeUsuario
+	}
+	
+	method medioDeTransportePreferidoDe(agencia){
+		perfil.elegirMedioDeTransporteDe(agencia)
+	}
+	
+	method tiene(objetoEnLaMochila){
+		return mochila.any({item => item.contains("Asistencia al viajero")})
+	}
 }
-object empresario inherits Usuario{
+
+object empresario{
 	method elegirMedioDeTransporteDe(agencia){
 		return agencia.medioDeTransporteMasRapido()
 	}
 }
-/*object estudiantil inherits Usuario{
-	method elegirMedioDeTransporteDe(agencia){
-		if(self.cuenta()>= agencia.medioDeTransporteMasRapido().valor)
-		return agencia.medioDeTransporteMasRapido()
-	}
-}*/
-object grupoFamiliar inherits Usuario{
+
+//object estudiantil{
+//	method elegirMedioDeTransporteDe(agencia){
+//		if(self.cuenta()>= agencia.medioDeTransporteMasRapido().valor)
+//		return agencia.medioDeTransporteMasRapido()
+//	}
+//}
+
+object grupoFamiliar{
 	method elegirMedioDeTransporteDe(agencia){
 		return agencia.mediosDeTransporte().take([0.randomUpTo(agencia.cantidadDeMediosDeTransporte())])
 	}
-	}
+}
 
-class Viajes {
+class Viaje{
 	var localidadDeOrigen
 	var localidadDeDestino
 	var medioDeTransporte 
@@ -199,7 +226,7 @@ class Viajes {
 	}
 	
 	method precioDelMedioDeTransporte(){
-		return medioDeTransporte.valorPorKilometro()*localidadDeOrigen.kilometrosHasta(localidadDeDestino)
+		return medioDeTransporte.valorPorKilometro() * localidadDeOrigen.kilometrosHasta(localidadDeDestino)
 	}
 	
 	method cambiarOrigenSegun(usuario){
@@ -224,10 +251,7 @@ object barrileteCosmico{
 	var destinos = []
 	var mediosDeTransporte = []
 	
-	method mediosDeTransporte(){
-		return mediosDeTransporte
-		
-		}
+	method mediosDeTransporte() = mediosDeTransporte
 	
 	method cartaDeDestinos(){
 		return destinos.map({ destino => destino.nombre() })
@@ -242,19 +266,19 @@ object barrileteCosmico{
 	}
 	
 	method destinosMasImportantes(){
-		return destinos.filter({ destino=>destino.destacado() })
+		return destinos.filter({ destino => destino.destacado() })
 	}
 	
 	method aplicarDescuentoATodosLosDestinos(descuento){
 		destinos.forEach({ destino => destino.aplicarDescuento(descuento) })
 	}
 	
-	method esEmpresaExtrema(){
-		return destinos.any({ destino => destino.esPeligroso(destino) })
+	method esEmpresaExtremaPara(usuario){
+		return destinos.any({ destino => destino.esPeligrosoPara(usuario) })
 	}
 		
-	method lugaresPeligrosos(){
-		return destinos.filter({ destino => destino.esPeligroso(destino) })
+	method lugaresPeligrososPara(usuario){
+		return destinos.filter({ destino => destino.esPeligrosoPara(usuario) })
 	}
 	
 	method armarViaje(viaje, localidadDeDestino, usuario){
