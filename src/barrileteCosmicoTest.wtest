@@ -16,40 +16,28 @@ describe "Barrilete Cósmico" {
 	var viajeNuevo2
 	var turbina1
 	var turbina2
-	var turbina3
-	var turbina4
 	var micro2
 	var tren2
 
 	fixture{
-		garlicsSea 	= new Localidad(nombre= "Garlic's Sea",sugerenciasDeViaje = ["Caña de Pescar", "Piloto"] ,precioPorVolar = 2500,kilometroDeUbicacion=0)
-		silversSea 	= new Localidad(nombre= "Silver's Sea",sugerenciasDeViaje = ["Protector Solar", "Equipo de Buceo"] ,precioPorVolar = 1350,kilometroDeUbicacion=100)
-		lastToninas = new Localidad(nombre= "Last Toninas",sugerenciasDeViaje = ["Vacuna Gripal", "Vacuna B", "Necronomicon"] ,precioPorVolar = 3500,kilometroDeUbicacion=200)
-		goodAirs 	= new Localidad(nombre= "Good Airs",sugerenciasDeViaje = ["Cerveza", "ProtectorSolar"] ,precioPorVolar = 1500,kilometroDeUbicacion=300)
-		
-		garlicsSea 	= new Playas(nombre= "Garlic's Sea",sugerenciasDeViaje = ["Caña de Pescar", "Piloto"] ,precioPorVolar = 2500,kilometroDeUbicacion=0)
-		silversSea 	= new CiudadesHistoricas(nombre= "Silver's Sea",sugerenciasDeViaje = ["Protector Solar", "Equipo de Buceo","Asistencia al viajero"] ,precioPorVolar = 2350,kilometroDeUbicacion=100,museos=["Ciencias","Informatica","Historia"])
-		lastToninas = new Playas(nombre= "Last Toninas",sugerenciasDeViaje = ["Vacuna Gripal", "Vacuna B", "Necronomicon"] ,precioPorVolar = 3500,kilometroDeUbicacion=200)
-		goodAirs 	= new Montanias(nombre= "Good Airs",sugerenciasDeViaje = ["Cerveza", "ProtectorSolar","Vacuna"] ,precioPorVolar = 1500,kilometroDeUbicacion=300,altura = 5001)
+		garlicsSea 	= new Playa(nombre= "Garlic's Sea",sugerenciasDeViaje = ["Caña de Pescar", "Piloto"] ,precioPorVolar = 2500,kilometroDeUbicacion=0)
+		silversSea 	= new CiudadHistorica(nombre= "Silver's Sea",sugerenciasDeViaje = ["Protector Solar", "Equipo de Buceo"] ,precioPorVolar = 2350,kilometroDeUbicacion=100,museos=["Ciencias","Informatica","Historia"])
+		lastToninas = new Playa(nombre= "Last Toninas",sugerenciasDeViaje = ["Vacuna Gripal", "Vacuna B", "Necronomicon"] ,precioPorVolar = 3500,kilometroDeUbicacion=200)
+		goodAirs 	= new Montania(nombre= "Good Airs",sugerenciasDeViaje = ["Cerveza", "ProtectorSolar","Vacuna"] ,precioPorVolar = 1500,kilometroDeUbicacion=300,altura = 5001)
 	
-		turbina1 = new Turbinas(nivelDeImpulso=100)
-		turbina2 = new Turbinas(nivelDeImpulso=200)
-		turbina3 = new Turbinas(nivelDeImpulso=300)
-		turbina4 = new Turbinas(nivelDeImpulso=400)
+		turbina1 = new Turbina(nivelDeImpulso=100)
+		turbina2 = new Turbina(nivelDeImpulso=200)
+		
+		avion = new Avion(duracion = 1, turbinas = [])
+		auto = new MedioDeTransporte(duracion = 10)
+		barco = new Barco(duracion = 7,probabilidadDeChocarConIceberg=1000)
+		tren = new Tren(duracion = 9)
+		micro = new Micro(duracion = 8)
+		tren2 = new Tren(duracion = 9)
+		micro2 = new Micro(duracion = 8)
 		
 		avion.agregarTurbina(turbina1)
 		avion.agregarTurbina(turbina2)
-		avion.agregarTurbina(turbina3)
-		avion.agregarTurbina(turbina4)
-		
-		avion = new Aviones(duracion = 1, valorPorKilometro = 50, turbinas = [])
-		auto = new MedioDeTransporte(duracion = 10, valorPorKilometro = 10)
-		barco = new Barcos(duracion = 7, valorPorKilometro = 30,probabilidadDeChocarConIceberg=1000)
-		tren = new Trenes(duracion = 9, valorPorKilometro = 20)
-		micro = new Micros(duracion = 8, valorPorKilometro = 40)
-		tren2 = new MedioDeTransporte(duracion = 9, valorPorKilometro = 20)
-		micro2 = new MedioDeTransporte(duracion = 8, valorPorKilometro = 40)
-		
 		
 		barrileteCosmico.agregarDestino(garlicsSea)
 		barrileteCosmico.agregarDestino(silversSea)
@@ -60,15 +48,14 @@ describe "Barrilete Cósmico" {
 		barrileteCosmico.agregarMedioDeTransporte(tren)
 		barrileteCosmico.agregarMedioDeTransporte(micro)
 		
+		viajeNuevo1 = new Viaje(localidadDeOrigen = garlicsSea, localidadDeDestino = lastToninas, medioDeTransporte = tren)
+		viajeNuevo2 = new Viaje(localidadDeOrigen = garlicsSea, localidadDeDestino = silversSea, medioDeTransporte = micro)
 		
-		viajeNuevo1 = new Viajes(localidadDeOrigen = garlicsSea, localidadDeDestino = lastToninas, medioDeTransporte = auto)
-		viajeNuevo2 = new Viajes(localidadDeOrigen = garlicsSea, localidadDeDestino = goodAirs, medioDeTransporte = micro2)
-		
-		phari = new Usuario(userName="Phari", historial=[viajeNuevo1,viajeNuevo2],cuenta = 17000, siguiendo= [], localidadDeOrigen = garlicsSea, perfil = empresario)
+		phari = new Usuario(username="Phari", historial=[viajeNuevo1,viajeNuevo2],cuenta = 880000, siguiendo= [], origen = garlicsSea, destino = silversSea, perfil = empresario, mochila=["Protector Solar","Equipo de Buceo","Vacuna Gripal", "Vacuna B", "Necronomicon"])
 	}
 
-	test "Los destinos más importantes de BC son Garlic's Sea y Last Toninas" {	
-		assert.equals([garlicsSea, lastToninas], barrileteCosmico.destinosMasImportantes())
+	test "Los destinos más importantes de BC son Garlic's Sea, Last Toninas y Good Airs" {	
+		assert.equals([garlicsSea, lastToninas, goodAirs], barrileteCosmico.destinosMasImportantes())
 	}
 	
 	test "Descuento del 25% en Last Toninas - Precio"{
@@ -81,8 +68,8 @@ describe "Barrilete Cósmico" {
 		assert.that(lastToninas.sugerenciasDeViaje().contains("Certificado de descuento"))
 	}
 	
-	test "Silver's Sea no es un destino peligroso"{
-		assert.notThat(silversSea.esPeligroso(silversSea))
+	test "Silver's Sea es un destino peligroso porque Phari no tiene Asistencia al viajero"{
+		assert.that(silversSea.esPeligrosoPara(phari))
 	}
 	
 	test "Descuento del 15% a Garlic's Sea"{
@@ -92,7 +79,7 @@ describe "Barrilete Cósmico" {
 	
 	test "Descuento del 15% a Silver's Sea"{
 		barrileteCosmico.aplicarDescuentoATodosLosDestinos(15)
-		assert.equals(1147.5,silversSea.precioPorVolar())
+		assert.equals(1997.5,silversSea.precioPorVolar())
 	}
 	
 	test "Descuento del 15% a Last Toninas"{
@@ -105,30 +92,30 @@ describe "Barrilete Cósmico" {
 		assert.equals(1275,goodAirs.precioPorVolar())
 	}
 
-	test "Destino más peligrosos hasta el momento es Last Toninas"{
-		assert.equals([lastToninas],barrileteCosmico.lugaresPeligrosos())
+	test "Los destinos más peligrosos para Phari son Silver's Sea y Good Airs"{
+		assert.equals([silversSea, goodAirs],barrileteCosmico.lugaresPeligrososPara(phari))
 	}
 	
 	test "BC es empresa extrema"{
-		assert.that(barrileteCosmico.esEmpresaExtrema())	
+		assert.that(barrileteCosmico.esEmpresaExtremaPara(phari))	
 	}
 	
 	test "Los destinos de BC son Last Toninas, Garlic's Sea, Good Airs y Silver's Sea"{
 		assert.equals(["Garlic's Sea", "Silver's Sea", "Last Toninas", "Good Airs"], barrileteCosmico.cartaDeDestinos())
 	}
 	
-	test "PHari tiene 500 km"{
-		assert.equals(500, phari.kilometros())
+	test "Phari tiene 300 km"{
+		assert.equals(300, phari.kilometros())
 	}
 	
-	test "PHari puede viajar a viajeNuevo1 y dicho viaje se agrega a su historial"{
+	test "Phari puede viajar a viajeNuevo1 y dicho viaje se agrega a su historial"{
 		phari.viajar(viajeNuevo1)
 		assert.that(phari.historial().contains(viajeNuevo1))
 	}
 
-	test "Phari puede viajar a viajeNuevo2 y tiene $500"{
+	test "Phari puede viajar a viajeNuevo2 y tiene $377650"{
 		phari.viajar(viajeNuevo2)
-		assert.equals(500, phari.cuenta())
+		assert.equals(377650, phari.cuenta())
 	}
 
 	/* TESTS SEGUNDA PARTE */
@@ -149,12 +136,12 @@ describe "Barrilete Cósmico" {
 		assert.equals(goodAirs.kilometrosHasta(lastToninas), lastToninas.kilometrosHasta(goodAirs))
 	}
 	
-	test "El precio del viajeNuevo1 es $5500"{
-		assert.equals(5500, viajeNuevo1.precioDelViaje())
+	test "El precio del viajeNuevo1 es $739500"{
+		assert.equals(739500, viajeNuevo1.precioDelViaje())
 	}
 	
-	test "El precio del viajeNuevo2 es $16500"{
-		assert.equals(16500, viajeNuevo2.precioDelViaje())
+	test "El precio del viajeNuevo2 es $502350"{
+		assert.equals(502350, viajeNuevo2.precioDelViaje())
 	}
 	
 	test "La localidad de origen de Phari luego de hacer el viajeNuevo1 es Last Toninas"{
@@ -166,36 +153,56 @@ describe "Barrilete Cósmico" {
 		phari.viajar(viajeNuevo1)
 		assert.throwsException({ phari.viajar(viajeNuevo2) })
 	}
-	/*TEST TERCERA PARTE */
-	test "Las playas no son destinos peligroso"{
-		assert.notThat(lastToninas.esPeligroso(lastToninas))
+	
+	/* TESTS TERCERA PARTE */
+	
+	test "Las playas no son destinos peligrosos"{
+		assert.notThat(lastToninas.esPeligrosoPara(phari))
 	}
-	test "Las montanias son destinos peligroso"{
-		assert.that(goodAirs.esPeligroso(goodAirs))
+	
+	test "Las montanias son destinos peligrosos si miden más de 5000m"{
+		assert.that(goodAirs.esPeligrosoPara(phari))
 	}
-	test "Las ciudades historicas son destinos peligroso"{
-		assert.that(silversSea.esPeligroso(silversSea))
+	
+	test "Las ciudades historicas son destinos peligroso si el usuario no tiene asistencia al viajero"{
+		assert.that(silversSea.esPeligrosoPara(phari))
 	}
-	test "Las playas son destacadas"{
-		assert.that(lastToninas.destinoDestacado(lastToninas))
+	
+	test "Las montanias siempre son un destino destacado"{
+		assert.that(goodAirs.destacado())
 	}
-	test "Las montanias son destacadas"{
-		assert.that(goodAirs.destinoDestacado(goodAirs))
+	
+	test "Las ciudades historicas que tienen menos de 3 museos no son destacadas aunque su precio sea mayor a $2000"{
+		assert.notThat(silversSea.destacado())
 	}
-	test "Las ciudades historicas son destacadas"{
-		assert.that(silversSea.destinoDestacado(silversSea))
+	
+	test "El valor por kilometro del avion es la sumatoria del impulso de las turbinas"{
+		assert.equals(300,avion.valorPorKilometro())
 	}
-	test "El valor por kilometro del avion es"{
-		assert.equals(1,avion.valorPorKilometro())
+	
+	test "El valor por kilometro del micro es siemre 5000"{
+		assert.equals(5000,micro.valorPorKilometro())
 	}
-	test "El valor por kilometro del micro es"{
-		assert.equals(40,micro.valorPorKilometro())
+	
+	test "El valor por kilometro del tren es 3680"{
+		assert.equals(3680,tren.valorPorKilometro())
 	}
-	test "El valor por kilometro del tren es"{
-		assert.equals(20,tren.valorPorKilometro())
-	}
+	
 	test "El valor por kilometro del barco es"{
 		assert.equals(1000000,barco.valorPorKilometro())
+	}
+	
+//	test "Un empresario elige viajar en avión porque es el más rápido y no le importa su costo"{
+//		assert.equals(avion, empresario.elegirMedioDeTransporteDe(barrileteCosmico))
+//	}
+//	
+//	test "Un estudiante elige viajar en __ porque es el más rápido dentro de lo que puede pagar"{
+//		assert.equals(avion, estudiante.elegirMedioDeTransporteDe(barrileteCosmico))
+//	}
+	
+	test "Phari no puede viajar porque le falta un item indispensable para viajar a Silver's Sea"{
+		phari.vaciarMochila()
+		assert.throwsException({ phari.viajar(viajeNuevo2) })
 	}
 	
 }
