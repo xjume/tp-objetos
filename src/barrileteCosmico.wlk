@@ -193,12 +193,15 @@ object empresario{
 	}
 }
 
-//object estudiantil{
-//	method elegirMedioDeTransporteDe(agencia){
-//		if(self.cuenta()>= agencia.medioDeTransporteMasRapido().valor)
-//		return agencia.medioDeTransporteMasRapido()
-//	}
-//}
+object estudiantil {
+	var cuenta = 25000
+	method elegirMedioDeTransporteDe(agencia){
+		if(cuenta >= agencia.medioDeTransporteMasRapido().valorPorKilometro()){
+		return agencia.medioDeTransporteMasRapido()
+	}
+	}
+	
+}
 
 object grupoFamiliar{
 	method elegirMedioDeTransporteDe(agencia){

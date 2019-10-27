@@ -47,6 +47,9 @@ describe "Barrilete Cósmico" {
 		barrileteCosmico.agregarMedioDeTransporte(auto)
 		barrileteCosmico.agregarMedioDeTransporte(tren)
 		barrileteCosmico.agregarMedioDeTransporte(micro)
+		barrileteCosmico.agregarMedioDeTransporte(avion)
+		barrileteCosmico.agregarMedioDeTransporte(barco)
+		
 		
 		viajeNuevo1 = new Viaje(localidadDeOrigen = garlicsSea, localidadDeDestino = lastToninas, medioDeTransporte = tren)
 		viajeNuevo2 = new Viaje(localidadDeOrigen = garlicsSea, localidadDeDestino = silversSea, medioDeTransporte = micro)
@@ -121,7 +124,7 @@ describe "Barrilete Cósmico" {
 	/* TESTS SEGUNDA PARTE */
 
 	test "Barrilete Cósmico tiene diferentes medios de transporte"{
-		assert.equals([auto, tren, micro], barrileteCosmico.mediosDeTransporte())
+		assert.equals([auto, tren, micro, avion, barco], barrileteCosmico.mediosDeTransporte())
 	}
 	
 	test "Last Toninas se encuentra en el km 200"{
@@ -192,13 +195,13 @@ describe "Barrilete Cósmico" {
 		assert.equals(1000000,barco.valorPorKilometro())
 	}
 	
-//	test "Un empresario elige viajar en avión porque es el más rápido y no le importa su costo"{
-//		assert.equals(avion, empresario.elegirMedioDeTransporteDe(barrileteCosmico))
-//	}
-//	
-//	test "Un estudiante elige viajar en __ porque es el más rápido dentro de lo que puede pagar"{
-//		assert.equals(avion, estudiante.elegirMedioDeTransporteDe(barrileteCosmico))
-//	}
+	test "Un empresario elige viajar en avión porque es el más rápido y no le importa su costo"{
+		assert.equals(avion, empresario.elegirMedioDeTransporteDe(barrileteCosmico))
+	}
+	
+	test "Un estudiante elige viajar en __ porque es el más rápido dentro de lo que puede pagar"{
+		assert.equals(avion, estudiantil.elegirMedioDeTransporteDe(barrileteCosmico))
+	}
 	
 	test "Phari no puede viajar porque le falta un item indispensable para viajar a Silver's Sea"{
 		phari.vaciarMochila()
